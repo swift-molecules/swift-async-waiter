@@ -2,10 +2,9 @@ import Buffer
 public import Buffer_Ring_Bounded_Primitive
 import Buffer_Ring_Primitive
 import Column
-import Memory_Allocator_Primitive
+import Memory_Allocator
 import Memory_Heap
 public import Queue
-public import Storage
 
 extension Async.Waiter {
 
