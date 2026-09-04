@@ -3,7 +3,7 @@ public import Buffer_Ring_Bounded_Primitive
 public import Buffer_Ring_Primitive
 public import Column
 public import Memory_Allocator
-public import Memory_Heap
+public import Memory
 public import Queue
 
 extension Queue.Queue where S: ~Copyable {
