@@ -5,6 +5,7 @@ public import Column
 public import Memory_Allocator
 public import Memory
 public import Queue
+public import Storage_Memory
 
 extension Queue.Queue where S: ~Copyable {
 

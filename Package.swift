@@ -12,42 +12,44 @@ let package = Package(
         .visionOS(.v27),
     ],
     products: [
-        .library(
-            name: "Async Waiter",
-            targets: ["Async Waiter"]
-        )
+        .library(name: "Async Waiter", targets: ["Async Waiter"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/swift-molecules/swift-async", branch: "main"),
-        .package(url: "https://github.com/swift-atoms/swift-buffer", branch: "main"),
-        .package(url: "https://github.com/swift-molecules/swift-buffer-ring", branch: "main"),
-        .package(url: "https://github.com/swift-molecules/swift-column", branch: "main"),
-        .package(url: "https://github.com/swift-molecules/swift-memory-allocation", branch: "main"),
-        .package(url: "https://github.com/swift-atoms/swift-memory", branch: "main"),
-        .package(url: "https://github.com/swift-molecules/swift-queue", branch: "main"),
-        .package(url: "https://github.com/swift-atoms/swift-tagged", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-async.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-buffer.git", branch: "main"),
+        .package(url: "https://github.com/swift-molecules/swift-buffer-ring.git", branch: "main"),
+        .package(url: "https://github.com/swift-molecules/swift-column.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-memory.git", branch: "main"),
+        .package(url: "https://github.com/swift-molecules/swift-memory-allocation.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-queue.git", branch: "main"),
+        .package(url: "https://github.com/swift-molecules/swift-storage-memory.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-tagged.git", branch: "main"),
     ],
     targets: [
         .target(
             name: "Async Waiter",
             dependencies: [
-                .product(name: "Async", package: "swift-async"),
+                .product(name: "Async Continuation", package: "swift-async"),
+                .product(name: "Async Primitive", package: "swift-async"),
                 .product(name: "Buffer", package: "swift-buffer"),
-                .product(name: "Buffer Ring Bounded", package: "swift-buffer-ring"),
-                .product(name: "Buffer Ring", package: "swift-buffer-ring"),
+                .product(name: "Buffer Ring Bounded Primitive", package: "swift-buffer-ring"),
+                .product(name: "Buffer Ring Primitive", package: "swift-buffer-ring"),
                 .product(name: "Column", package: "swift-column"),
-                .product(name: "Memory Allocator", package: "swift-memory-allocation"),
                 .product(name: "Memory", package: "swift-memory"),
+                .product(name: "Memory Allocator", package: "swift-memory-allocation"),
                 .product(name: "Queue", package: "swift-queue"),
+                .product(name: "Storage Memory", package: "swift-storage-memory"),
                 .product(name: "Tagged", package: "swift-tagged"),
-            ]
+            ],
+            path: "Sources/Async Waiter"
         ),
         .testTarget(
             name: "Async Waiter Tests",
             dependencies: [
-                "Async Waiter",
                 .product(name: "Async", package: "swift-async"),
-            ]
+                .target(name: "Async Waiter"),
+            ],
+            path: "Tests/Async Waiter Tests"
         ),
     ],
     swiftLanguageModes: [.v6]

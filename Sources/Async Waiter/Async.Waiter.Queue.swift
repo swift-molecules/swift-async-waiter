@@ -5,6 +5,7 @@ import Column
 import Memory_Allocator
 import Memory
 public import Queue
+public import Storage_Memory
 
 extension Async.Waiter {
 

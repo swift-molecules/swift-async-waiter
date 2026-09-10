@@ -1,17 +1,18 @@
+import Async_Waiter
 import Async
 import Testing
 
 enum Waiter {
     enum Test {
-        @Suite struct Flag {}
-        @Suite struct Entry {}
-        @Suite struct Queue {}
+        @Suite struct `Waiter flags record cancellation and timeout` {}
+        @Suite struct `Waiter entries preserve their signals and lifetimes` {}
+        @Suite struct `Waiter queues preserve insertion and removal` {}
     }
 }
 
-extension Waiter.Test.Flag {
+extension Waiter.Test.`Waiter flags record cancellation and timeout` {
     @Test
-    func `init creates unflagged state`() {
+    func `Init creates unflagged state`() {
         let flag = Async.Waiter.Flag()
         #expect(!flag.cancelled)
         #expect(!flag.timedOut)
@@ -20,7 +21,7 @@ extension Waiter.Test.Flag {
     }
 
     @Test
-    func `cancel sets cancelled flag`() {
+    func `Cancel sets cancelled flag`() {
         let flag = Async.Waiter.Flag()
         let didSet = flag.cancel()
         #expect(didSet)
@@ -29,14 +30,14 @@ extension Waiter.Test.Flag {
     }
 
     @Test
-    func `cancel returns false on second call`() {
+    func `Cancel returns false on second call`() {
         let flag = Async.Waiter.Flag()
         #expect(flag.cancel())
         #expect(!flag.cancel())
     }
 
     @Test
-    func `timeout sets timedOut flag`() {
+    func `Timeout sets timedOut flag`() {
         let flag = Async.Waiter.Flag()
         let didSet = flag.timeout()
         #expect(didSet)
@@ -45,14 +46,14 @@ extension Waiter.Test.Flag {
     }
 
     @Test
-    func `timeout returns false on second call`() {
+    func `Timeout returns false on second call`() {
         let flag = Async.Waiter.Flag()
         #expect(flag.timeout())
         #expect(!flag.timeout())
     }
 
     @Test
-    func `cancel and timeout are independent`() {
+    func `Cancel and timeout are independent`() {
         let flag = Async.Waiter.Flag()
         #expect(flag.cancel())
         #expect(flag.timeout())
@@ -61,21 +62,21 @@ extension Waiter.Test.Flag {
     }
 
     @Test
-    func `reason returns cancelled when only cancelled`() {
+    func `Reason returns cancelled when only cancelled`() {
         let flag = Async.Waiter.Flag()
         flag.cancel()
         #expect(flag.reason == .cancelled)
     }
 
     @Test
-    func `reason returns timedOut when only timedOut`() {
+    func `Reason returns timedOut when only timedOut`() {
         let flag = Async.Waiter.Flag()
         flag.timeout()
         #expect(flag.reason == .timedOut)
     }
 
     @Test
-    func `reason prefers cancelled over timedOut`() {
+    func `Reason prefers cancelled over timedOut`() {
         let flag = Async.Waiter.Flag()
         flag.cancel()
         flag.timeout()
@@ -83,7 +84,7 @@ extension Waiter.Test.Flag {
     }
 
     @Test
-    func `reason prefers cancelled regardless of set order`() {
+    func `Reason prefers cancelled regardless of set order`() {
         let flag = Async.Waiter.Flag()
         flag.timeout()
         flag.cancel()
@@ -91,15 +92,15 @@ extension Waiter.Test.Flag {
     }
 
     @Test
-    func `reason returns nil when unflagged`() {
+    func `Reason returns nil when unflagged`() {
         let flag = Async.Waiter.Flag()
         #expect(flag.reason == nil)
     }
 }
 
-extension Waiter.Test.Entry {
+extension Waiter.Test.`Waiter entries preserve their signals and lifetimes` {
     @Test
-    func `entry stores flag reference`() {
+    func `Entry stores flag reference`() {
         let flag = Async.Waiter.Flag()
         let cont = Async.Continuation<Int> { _ in }
         let entry = Async.Waiter.Entry(continuation: cont, flag: flag)
@@ -113,7 +114,7 @@ extension Waiter.Test.Entry {
     }
 
     @Test
-    func `entry convenience init without metadata`() {
+    func `Entry convenience init without metadata`() {
         let flag = Async.Waiter.Flag()
         let cont = Async.Continuation<Bool> { _ in }
         let entry = Async.Waiter.Entry(continuation: cont, flag: flag)
@@ -123,7 +124,7 @@ extension Waiter.Test.Entry {
     }
 
     @Test
-    func `resumption resumes continuation with outcome`() {
+    func `Resumption resumes continuation with outcome`() {
         let publication = Async.Publication<Int>()
         let flag = Async.Waiter.Flag()
         let cont = Async.Continuation<Int> { value in
@@ -136,7 +137,7 @@ extension Waiter.Test.Entry {
     }
 
     @Test
-    func `resumption with different outcome types`() {
+    func `Resumption with different outcome types`() {
         let publication = Async.Publication<Bool>()
         let flag = Async.Waiter.Flag()
         let cont = Async.Continuation<Bool> { value in
@@ -148,9 +149,9 @@ extension Waiter.Test.Entry {
     }
 }
 
-extension Waiter.Test.Queue {
+extension Waiter.Test.`Waiter queues preserve insertion and removal` {
     @Test
-    func `popEligible returns unflagged entry`() {
+    func `PopEligible returns unflagged entry`() {
         var queue = Async.Waiter.Queue.Unbounded<Bool, Void>()
 
         let flag = Async.Waiter.Flag()
@@ -172,7 +173,7 @@ extension Waiter.Test.Queue {
     }
 
     @Test
-    func `popEligible skips cancelled entries`() {
+    func `PopEligible skips cancelled entries`() {
         var queue = Async.Waiter.Queue.Unbounded<Bool, Void>()
 
         let flag1 = Async.Waiter.Flag()
@@ -210,7 +211,7 @@ extension Waiter.Test.Queue {
     }
 
     @Test
-    func `popEligible skips timed out entries`() {
+    func `PopEligible skips timed out entries`() {
         var queue = Async.Waiter.Queue.Unbounded<Bool, Void>()
 
         let flag1 = Async.Waiter.Flag()
@@ -248,7 +249,7 @@ extension Waiter.Test.Queue {
     }
 
     @Test
-    func `popEligible skips multiple flagged entries`() {
+    func `PopEligible skips multiple flagged entries`() {
         var queue = Async.Waiter.Queue.Unbounded<Bool, Void>()
 
         let flag1 = Async.Waiter.Flag()
@@ -295,7 +296,7 @@ extension Waiter.Test.Queue {
     }
 
     @Test
-    func `popEligible returns nil when all flagged`() {
+    func `PopEligible returns nil when all flagged`() {
         var queue = Async.Waiter.Queue.Unbounded<Bool, Void>()
 
         let flag1 = Async.Waiter.Flag()
@@ -331,7 +332,7 @@ extension Waiter.Test.Queue {
     }
 
     @Test
-    func `popEligible returns nil from empty queue`() {
+    func `PopEligible returns nil from empty queue`() {
         var queue = Async.Waiter.Queue.Unbounded<Bool, Void>()
         var flagged = Async.Waiter.Queue.Drain<Async.Waiter.Queue.Flagged<Bool, Void>>()
         if let eligible = queue.popEligible(flaggedInto: &flagged) {
@@ -341,7 +342,7 @@ extension Waiter.Test.Queue {
     }
 
     @Test
-    func `reapFlagged collects flagged and retains unflagged`() {
+    func `ReapFlagged collects flagged and retains unflagged`() {
         var queue = Async.Waiter.Queue.Unbounded<Bool, Void>()
 
         queue.enqueue(
@@ -395,7 +396,7 @@ extension Waiter.Test.Queue {
     }
 
     @Test
-    func `reapFlagged on empty queue produces no flagged entries`() {
+    func `ReapFlagged on empty queue produces no flagged entries`() {
         var queue = Async.Waiter.Queue.Unbounded<Bool, Void>()
         var flagged = Async.Waiter.Queue.Drain<Async.Waiter.Queue.Flagged<Bool, Void>>()
         queue.reapFlagged(into: &flagged)
@@ -404,7 +405,7 @@ extension Waiter.Test.Queue {
     }
 
     @Test
-    func `reapFlagged with no flagged entries preserves all`() {
+    func `ReapFlagged with no flagged entries preserves all`() {
         var queue = Async.Waiter.Queue.Unbounded<Bool, Void>()
 
         queue.enqueue(
@@ -435,7 +436,7 @@ extension Waiter.Test.Queue {
     }
 
     @Test
-    func `flagged entry preserves cancel reason`() {
+    func `Flagged entry preserves cancel reason`() {
         var queue = Async.Waiter.Queue.Unbounded<Bool, Void>()
 
         let flag = Async.Waiter.Flag()
@@ -460,7 +461,7 @@ extension Waiter.Test.Queue {
     }
 
     @Test
-    func `flagged entry preserves timeout reason`() {
+    func `Flagged entry preserves timeout reason`() {
         var queue = Async.Waiter.Queue.Unbounded<Bool, Void>()
 
         let flag = Async.Waiter.Flag()
@@ -485,7 +486,7 @@ extension Waiter.Test.Queue {
     }
 
     @Test
-    func `flagged split deconstructs into components`() {
+    func `Flagged split deconstructs into components`() {
         let flag = Async.Waiter.Flag()
         flag.timeout()
         let entry = Async.Waiter.Entry(
