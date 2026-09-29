@@ -38,6 +38,7 @@ let package = Package(
                 .product(name: "Buffer Ring Primitive", package: "swift-buffer-ring"),
                 .product(name: "Memory", package: "swift-memory"),
                 .product(name: "Memory Allocator", package: "swift-memory-allocation"),
+                .product(name: "Memory Allocator Protocol", package: "swift-memory-allocation"),
                 .product(name: "Queue", package: "swift-queue"),
                 .product(name: "Tagged", package: "swift-tagged"),
                 .product(name: "Storage", package: "swift-storage"),
