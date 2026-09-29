@@ -56,6 +56,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Async", package: "swift-async"),
                 .target(name: "Async Waiter"),
+                .product(name: "Queue", package: "swift-queue"),
             ],
             path: "Tests/Async Waiter Tests"
         ),

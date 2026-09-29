@@ -1,5 +1,7 @@
 import Async_Waiter
 import Async
+import Queue
+import Queue_Primitive
 import Testing
 
 enum Waiter {
