@@ -21,10 +21,10 @@ extension Async.Waiter {
 extension Async.Waiter.Queue {
 
     public typealias Bounded<Outcome: Sendable, Metadata: ~Copyable & Sendable> =
-        Queue.Queue<Async.Waiter.Entry<Outcome, Metadata>>.Bounded
+        Queue::Queue<Async.Waiter.Entry<Outcome, Metadata>>.Bounded
 
     public typealias Unbounded<Outcome: Sendable, Metadata: ~Copyable & Sendable> =
-        Queue.Queue<Async.Waiter.Entry<Outcome, Metadata>>
+        Queue::Queue<Async.Waiter.Entry<Outcome, Metadata>>
 
-    public typealias Drain<Element: ~Copyable> = Queue.Queue<Element>
+    public typealias Drain<Element: ~Copyable> = Queue::Queue<Element>
 }

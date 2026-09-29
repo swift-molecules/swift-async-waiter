@@ -7,12 +7,12 @@ public import Storage
 
 public import Queue
 
-extension Queue.Queue where S: ~Copyable {
+extension Queue::Queue where S: ~Copyable {
 
     @inlinable
     public mutating func popEligible<Outcome: Sendable, Metadata: ~Copyable & Sendable>(
         flaggedInto flagged:
-            inout Queue.Queue<Async.Waiter.Queue.Flagged<Outcome, Metadata>>
+            inout Queue::Queue<Async.Waiter.Queue.Flagged<Outcome, Metadata>>
     ) -> S.Element? where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Async.Waiter.Entry<Outcome, Metadata>>>.Ring {
         while !isEmpty {
             guard let entry = dequeue() else { break }
@@ -25,13 +25,13 @@ extension Queue.Queue where S: ~Copyable {
     }
 }
 
-extension Queue.Queue where S: ~Copyable {
+extension Queue::Queue where S: ~Copyable {
 
     @inlinable
     public mutating func reapFlagged<Outcome: Sendable, Metadata: ~Copyable & Sendable>(
-        into flagged: inout Queue.Queue<Async.Waiter.Queue.Flagged<Outcome, Metadata>>
+        into flagged: inout Queue::Queue<Async.Waiter.Queue.Flagged<Outcome, Metadata>>
     ) where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Async.Waiter.Entry<Outcome, Metadata>>>.Ring {
-        var survivors = Queue.Queue<Async.Waiter.Entry<Outcome, Metadata>>()
+        var survivors = Queue::Queue<Async.Waiter.Entry<Outcome, Metadata>>()
 
         while !isEmpty {
             guard let entry = dequeue() else { break }
@@ -48,7 +48,7 @@ extension Queue.Queue where S: ~Copyable {
     }
 }
 
-extension Queue.Queue where S: ~Copyable {
+extension Queue::Queue where S: ~Copyable {
 
     @inlinable
     public mutating func push<Outcome: Sendable, Metadata: ~Copyable & Sendable>(
@@ -59,12 +59,12 @@ extension Queue.Queue where S: ~Copyable {
     }
 }
 
-extension Queue.Queue where S: ~Copyable {
+extension Queue::Queue where S: ~Copyable {
 
     @inlinable
     public mutating func popEligible<Outcome: Sendable, Metadata: ~Copyable & Sendable>(
         flaggedInto flagged:
-            inout Queue.Queue<Async.Waiter.Queue.Flagged<Outcome, Metadata>>
+            inout Queue::Queue<Async.Waiter.Queue.Flagged<Outcome, Metadata>>
     ) -> S.Element? where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Async.Waiter.Entry<Outcome, Metadata>>>.Ring.Bounded {
         while !isEmpty {
             guard let entry = dequeue() else { break }
@@ -77,13 +77,13 @@ extension Queue.Queue where S: ~Copyable {
     }
 }
 
-extension Queue.Queue where S: ~Copyable {
+extension Queue::Queue where S: ~Copyable {
 
     @inlinable
     public mutating func reapFlagged<Outcome: Sendable, Metadata: ~Copyable & Sendable>(
-        into flagged: inout Queue.Queue<Async.Waiter.Queue.Flagged<Outcome, Metadata>>
+        into flagged: inout Queue::Queue<Async.Waiter.Queue.Flagged<Outcome, Metadata>>
     ) where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Async.Waiter.Entry<Outcome, Metadata>>>.Ring.Bounded {
-        var survivors = Queue.Queue<Async.Waiter.Entry<Outcome, Metadata>>()
+        var survivors = Queue::Queue<Async.Waiter.Entry<Outcome, Metadata>>()
 
         while !isEmpty {
             guard let entry = dequeue() else { break }
