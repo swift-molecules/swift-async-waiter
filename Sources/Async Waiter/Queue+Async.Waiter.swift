@@ -1,11 +1,11 @@
 public import Buffer
 public import Buffer_Ring_Bounded_Primitive
 public import Buffer_Ring_Primitive
-public import Column
-public import Memory_Allocator
 public import Memory
+public import Memory_Allocator
+public import Storage
+
 public import Queue
-public import Storage_Memory
 
 extension Queue.Queue where S: ~Copyable {
 
@@ -13,7 +13,7 @@ extension Queue.Queue where S: ~Copyable {
     public mutating func popEligible<Outcome: Sendable, Metadata: ~Copyable & Sendable>(
         flaggedInto flagged:
             inout Queue.Queue<Async.Waiter.Queue.Flagged<Outcome, Metadata>>
-    ) -> S.Element? where S == Column.Ring<Async.Waiter.Entry<Outcome, Metadata>> {
+    ) -> S.Element? where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Async.Waiter.Entry<Outcome, Metadata>>>.Ring {
         while !isEmpty {
             guard let entry = dequeue() else { break }
             guard let reason = entry.flag.reason else {
@@ -30,7 +30,7 @@ extension Queue.Queue where S: ~Copyable {
     @inlinable
     public mutating func reapFlagged<Outcome: Sendable, Metadata: ~Copyable & Sendable>(
         into flagged: inout Queue.Queue<Async.Waiter.Queue.Flagged<Outcome, Metadata>>
-    ) where S == Column.Ring<Async.Waiter.Entry<Outcome, Metadata>> {
+    ) where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Async.Waiter.Entry<Outcome, Metadata>>>.Ring {
         var survivors = Queue.Queue<Async.Waiter.Entry<Outcome, Metadata>>()
 
         while !isEmpty {
@@ -53,7 +53,7 @@ extension Queue.Queue where S: ~Copyable {
     @inlinable
     public mutating func push<Outcome: Sendable, Metadata: ~Copyable & Sendable>(
         unchecked entry: consuming S.Element
-    ) where S == Column.Ring<Async.Waiter.Entry<Outcome, Metadata>>.Bounded {
+    ) where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Async.Waiter.Entry<Outcome, Metadata>>>.Ring.Bounded {
 
         try! enqueue(entry)
     }
@@ -65,7 +65,7 @@ extension Queue.Queue where S: ~Copyable {
     public mutating func popEligible<Outcome: Sendable, Metadata: ~Copyable & Sendable>(
         flaggedInto flagged:
             inout Queue.Queue<Async.Waiter.Queue.Flagged<Outcome, Metadata>>
-    ) -> S.Element? where S == Column.Ring<Async.Waiter.Entry<Outcome, Metadata>>.Bounded {
+    ) -> S.Element? where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Async.Waiter.Entry<Outcome, Metadata>>>.Ring.Bounded {
         while !isEmpty {
             guard let entry = dequeue() else { break }
             guard let reason = entry.flag.reason else {
@@ -82,7 +82,7 @@ extension Queue.Queue where S: ~Copyable {
     @inlinable
     public mutating func reapFlagged<Outcome: Sendable, Metadata: ~Copyable & Sendable>(
         into flagged: inout Queue.Queue<Async.Waiter.Queue.Flagged<Outcome, Metadata>>
-    ) where S == Column.Ring<Async.Waiter.Entry<Outcome, Metadata>>.Bounded {
+    ) where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Async.Waiter.Entry<Outcome, Metadata>>>.Ring.Bounded {
         var survivors = Queue.Queue<Async.Waiter.Entry<Outcome, Metadata>>()
 
         while !isEmpty {
