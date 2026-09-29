@@ -40,6 +40,7 @@ let package = Package(
                 .product(name: "Memory Allocator", package: "swift-memory-allocation"),
                 .product(name: "Memory Allocator Protocol", package: "swift-memory-allocation"),
                 .product(name: "Queue", package: "swift-queue"),
+                .product(name: "Queue Primitive", package: "swift-queue"),
                 .product(name: "Tagged", package: "swift-tagged"),
                 .product(name: "Storage", package: "swift-storage"),
                 .product(name: "Buffer Linear Primitive", package: "swift-buffer-linear"),
@@ -57,6 +58,7 @@ let package = Package(
                 .product(name: "Async", package: "swift-async"),
                 .target(name: "Async Waiter"),
                 .product(name: "Queue", package: "swift-queue"),
+                .product(name: "Queue Primitive", package: "swift-queue"),
             ],
             path: "Tests/Async Waiter Tests"
         ),
