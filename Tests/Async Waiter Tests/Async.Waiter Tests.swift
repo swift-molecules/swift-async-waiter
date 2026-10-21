@@ -1,5 +1,5 @@
-import Async_Waiter
 import Async
+import Async_Waiter
 import Queue
 import Queue_Primitive
 import Testing

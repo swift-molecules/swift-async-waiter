@@ -4,9 +4,8 @@ public import Buffer_Ring_Primitive
 public import Memory
 public import Memory_Allocator
 public import Memory_Allocator_Protocol
-public import Storage
-
 public import Queue
+public import Storage
 
 extension Queue::Queue where S: ~Copyable {
 
@@ -56,7 +55,11 @@ extension Queue::Queue where S: ~Copyable {
         unchecked entry: consuming S.Element
     ) where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Async.Waiter.Entry<Outcome, Metadata>>>.Ring.Bounded {
 
-        try! enqueue(entry)
+        do {
+            try enqueue(entry)
+        } catch {
+            preconditionFailure("Unchecked push requires spare capacity: \(error)")
+        }
     }
 }
 
@@ -97,7 +100,11 @@ extension Queue::Queue where S: ~Copyable {
 
         survivors.drain { entry in
 
-            try! self.enqueue(entry)
+            do {
+                try self.enqueue(entry)
+            } catch {
+                preconditionFailure("Survivors fit within the original capacity: \(error)")
+            }
         }
     }
 }
