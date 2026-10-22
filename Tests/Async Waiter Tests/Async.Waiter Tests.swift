@@ -438,6 +438,37 @@ extension Waiter.Test.`Waiter queues preserve insertion and removal` {
     }
 
     @Test
+    func `Bounded reap preserves a full queue of unflagged entries`() {
+        var queue = Async.Waiter.Queue.Bounded<Bool, Void>(capacity: 2)
+
+        queue.push(
+            unchecked: Async.Waiter.Entry(
+                continuation: Async.Continuation<Bool> { _ in },
+                flag: Async.Waiter.Flag()
+            )
+        )
+        queue.push(
+            unchecked: Async.Waiter.Entry(
+                continuation: Async.Continuation<Bool> { _ in },
+                flag: Async.Waiter.Flag()
+            )
+        )
+
+        var flagged = Async.Waiter.Queue.Drain<Async.Waiter.Queue.Flagged<Bool, Void>>()
+        queue.reapFlagged(into: &flagged)
+
+        let noFlagged = flagged.isEmpty
+        #expect(noFlagged)
+
+        var remainingCount = 0
+        while !queue.isEmpty {
+            _ = queue.dequeue()
+            remainingCount += 1
+        }
+        #expect(remainingCount == 2)
+    }
+
+    @Test
     func `Flagged entry preserves cancel reason`() {
         var queue = Async.Waiter.Queue.Unbounded<Bool, Void>()
 

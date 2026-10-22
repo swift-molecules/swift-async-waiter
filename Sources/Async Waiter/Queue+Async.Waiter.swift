@@ -58,7 +58,7 @@ extension Queue::Queue where S: ~Copyable {
         do {
             try enqueue(entry)
         } catch {
-            preconditionFailure("Unchecked push requires spare capacity: \(error)")
+            preconditionFailure("Unchecked push requires spare capacity")
         }
     }
 }
@@ -103,7 +103,7 @@ extension Queue::Queue where S: ~Copyable {
             do {
                 try self.enqueue(entry)
             } catch {
-                preconditionFailure("Survivors fit within the original capacity: \(error)")
+                preconditionFailure("Survivors fit within the original capacity")
             }
         }
     }
