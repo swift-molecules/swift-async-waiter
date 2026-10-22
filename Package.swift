@@ -59,6 +59,7 @@ let package = Package(
                 .target(name: "Async Waiter"),
                 .product(name: "Queue", package: "swift-queue"),
                 .product(name: "Queue Primitive", package: "swift-queue"),
+                .product(name: "Tagged", package: "swift-tagged"),
             ],
             path: "Tests/Async Waiter Tests"
         ),

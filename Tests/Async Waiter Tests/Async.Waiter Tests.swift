@@ -2,6 +2,7 @@ import Async
 import Async_Waiter
 import Queue
 import Queue_Primitive
+import Tagged
 import Testing
 
 enum Waiter {
