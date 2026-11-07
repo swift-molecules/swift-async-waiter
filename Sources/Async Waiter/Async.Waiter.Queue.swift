@@ -11,6 +11,7 @@ import Ownership_Shared_Primitive
 public import Queue
 public import Storage
 import Store
+public import Tagged
 
 extension Async.Waiter {
 
@@ -26,4 +27,9 @@ extension Async.Waiter.Queue {
         Queue::Queue<Async.Waiter.Entry<Outcome, Metadata>>
 
     public typealias Drain<Element: ~Copyable> = Queue::Queue<Element>
+}
+
+extension Async.Waiter.Queue {
+
+    public typealias Metadata = Tagged<Async.Waiter.Queue, UInt64>
 }
