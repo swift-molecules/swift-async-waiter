@@ -55,9 +55,7 @@ extension Queue::Queue where S: ~Copyable {
         unchecked entry: consuming S.Element
     ) where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<Async.Waiter.Entry<Outcome, Metadata>>>.Ring.Bounded {
 
-        do {
-            try enqueue(entry)
-        } catch {
+        guard enqueue(entry) == nil else {
             preconditionFailure("Unchecked push requires spare capacity")
         }
     }
@@ -100,9 +98,7 @@ extension Queue::Queue where S: ~Copyable {
 
         survivors.drain { entry in
 
-            do {
-                try self.enqueue(entry)
-            } catch {
+            guard self.enqueue(entry) == nil else {
                 preconditionFailure("Survivors fit within the original capacity")
             }
         }
